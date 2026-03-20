@@ -1,52 +1,59 @@
-## Assignment 18: Autosave EC2 Instance State Before Shutdown
+# Assignment 18: Autosave EC2 Instance State Before Shutdown
 
-### Objective
-
-To automatically save the state of an EC2 instance before it is terminated using AWS services.
-
----
-
-### Services Used
-
-* Amazon EC2
-* AWS Lambda
-* Amazon EventBridge (CloudWatch Events)
-* Amazon S3 (optional)
-* Amazon CloudWatch
+## Objective
+Automatically save EC2 instance data before shutdown using Lambda and EventBridge.
 
 ---
 
-### Implementation Steps
-
-1. Created an S3 bucket for storing backups (optional).
-2. Created an IAM role with required permissions (EC2, S3, CloudWatch).
-3. Developed a Lambda function using Boto3 to:
-
-   * Detect EC2 instance ID
-   * Create EBS snapshots of attached volumes
-4. Created an EventBridge rule to detect EC2 state change:
-
-   * Event type: EC2 Instance State-change Notification
-   * State: shutting-down
-5. Connected the EventBridge rule to trigger the Lambda function.
-6. Tested by terminating an EC2 instance.
+## Services Used
+- AWS Lambda
+- Amazon EC2
+- Amazon EventBridge
+- Amazon CloudWatch
+- Amazon S3
 
 ---
 
-### Output
-
-* EBS snapshots were automatically created before instance termination.
-* Logs were successfully generated in CloudWatch.
+## Architecture
+EventBridge detects EC2 shutdown → triggers Lambda → Lambda creates snapshot
 
 ---
 
-### Conclusion
+## Steps
 
-This setup ensures automatic backup of EC2 instances before termination, preventing data loss and improving system reliability.
+1. Created Lambda function using Python (Boto3)
+2. Configured IAM Role with EC2 permissions
+3. Created EventBridge rule for EC2 state change
+4. Set target as Lambda function
+5. Tested by stopping EC2 instance
+6. Snapshot created successfully
 
 ---
 
-### Real-World Use Case
+## Screenshots
 
-Used in production environments to safeguard critical data before shutting down or terminating EC2 instances.
+### Event Trigger
+![Event](screenshots/test-event1.png)
 
+### Lambda Function
+![Lambda](screenshots/lambda-function1.png)
+
+### IAM Role
+![IAM](screenshots/IAM-role1.png)
+
+### EventBridge Rule
+![Rule](screenshots/EventBridge-Rule.png)
+
+### Snapshot Created
+![Snapshot](screenshots/snapshot-test.png)
+
+### S3 Bucket
+![S3](screenshots/S3-bucket.png)
+
+### CloudWatch Logs
+![Logs](screenshots/Cloud-watch-check.png)
+
+---
+
+## Output
+EC2 instance data is automatically backed up before shutdown using snapshots.
